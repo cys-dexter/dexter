@@ -3,20 +3,23 @@ import ipaddress
 import os
 import sys
 
-# ANSI Terminal Color Palette
-RED = "\033[31m"  # Blood Red
-GREEN = "\033[32m"  # Success Green
-YELLOW = "\033[33m"  # Warning/Process Yellow
-CYAN = "\033[36m"  # Technical Cyan
-RESET = "\033[0m"  # Reset to default
+# إخفاء تحذيرات البايثون الشكلية المزعجة من التيرمنال
+import warnings
 
-# ملف حفظ العناوين المحظورة محلياً (مستودع الأيبات)
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+
+# ANSI Terminal Color Palette
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+CYAN = "\033[36m"
+RESET = "\033[0m"
+
 BANNED_REPO_FILE = "banned_ips.txt"
 
 
 def print_banner():
-  # Elite Cyber Threat Hunting & Dexter Inspired ASCII Art
-  banner = f"""
+  banner = fr"""
 {RED}    ________  __     _______ ___  ______ 
    /_  __/ / / / __ \/ ____/   |/_  __/ 
     / / / /_/ / /_/ / __/ / /| |  / /    
@@ -31,8 +34,12 @@ def print_banner():
   print(banner)
 
 
+def clear_screen():
+  """مسح الشاشة لمنع تكرار المخرجات وجعل الواجهة نظيفة تماماً"""
+  os.system("cls" if os.name == "nt" else "clear")
+
+
 def is_valid_ip(ip_str):
-  """التحقق من صحة عنوان IP (IPv4 أو IPv6)"""
   try:
     ipaddress.ip_address(ip_str)
     return True
@@ -41,7 +48,6 @@ def is_valid_ip(ip_str):
 
 
 def save_to_banned_repository(target_ip):
-  """حفظ الـ IP المحظور في مستودع محلي (ملف نصي) لمنع التكرار وتوثيقه"""
   try:
     banned_list = []
     if os.path.exists(BANNED_REPO_FILE):
@@ -119,14 +125,19 @@ def eliminate_target(target_ip):
 
 
 if __name__ == "__main__":
+  # التحقق من صلاحيات الرووت بطريقة أظف وأسرع بدون طباعة رسالة مزعجة تسبق البانر
   if os.geteuid() != 0:
     print(
         f"{RED}[!] SECURITY NOTICE: This tool requires root privileges to"
         f" manipulate iptables.{RESET}"
     )
     print(f"{YELLOW}[*] Please run as: sudo python3 dexter.py <IP>{RESET}\n")
+    sys.exit(1)
 
+  # مسح الشاشة لترتيب العرض وعرض البانر مرة واحدة فقط بشكل نظيف
+  clear_screen()
   print_banner()
+
   if len(sys.argv) < 2:
     print(f"{YELLOW}Usage: sudo python3 dexter.py <TARGET_IP>{RESET}\n")
     if os.path.exists(BANNED_REPO_FILE):
