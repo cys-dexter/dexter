@@ -92,12 +92,14 @@ def eliminate_target(target_ip):
 
 
 if __name__ == "__main__":
+    # طباعة البانر في البداية دائماً ليكون مظهر الأداة احترافياً
+    print_banner()
+
+    # التحقق من صلاحيات الرووت
     if os.geteuid() != 0:
         print(f"{RED}[!] SECURITY NOTICE: This tool requires root privileges to manipulate iptables.{RESET}")
         print(f"{YELLOW}[*] Please run as: sudo python3 dexter.py <IP>{RESET}\n")
         sys.exit(1)
-
-    print_banner()
 
     if len(sys.argv) < 2:
         print(f"{YELLOW}Usage: sudo python3 dexter.py <TARGET_IP>{RESET}\n")
