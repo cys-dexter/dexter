@@ -125,7 +125,6 @@ def eliminate_target(target_ip):
 
 
 if __name__ == "__main__":
-  # التحقق من صلاحيات الرووت بطريقة أظف وأسرع بدون طباعة رسالة مزعجة تسبق البانر
   if os.geteuid() != 0:
     print(
         f"{RED}[!] SECURITY NOTICE: This tool requires root privileges to"
@@ -134,7 +133,6 @@ if __name__ == "__main__":
     print(f"{YELLOW}[*] Please run as: sudo python3 dexter.py <IP>{RESET}\n")
     sys.exit(1)
 
-  # مسح الشاشة لترتيب العرض وعرض البانر مرة واحدة فقط بشكل نظيف
   clear_screen()
   print_banner()
 
